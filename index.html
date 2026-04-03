@@ -357,7 +357,7 @@ textarea{resize:none;height:70px;font-size:.82rem}
 </nav>
 
 <script>
-const ANTHROPIC_KEY = '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';
+// API key is handled server-side via Netlify Function
 let CFG={high:parseInt(localStorage.getItem('cfg_high')||'180'),low:parseInt(localStorage.getItem('cfg_low')||'70'),vhigh:parseInt(localStorage.getItem('cfg_vhigh')||'240'),togHigh:localStorage.getItem('tog_high')!=='false',togLow:localStorage.getItem('tog_low')!=='false',togRapid:localStorage.getItem('tog_rapid')!=='false',togRefresh:localStorage.getItem('tog_refresh')!=='false'};
 const TM={'NONE':{a:'→',l:'Sin datos',c:'var(--t3)'},'DoubleUp':{a:'↑↑',l:'Sube muy rápido',c:'var(--red)'},'SingleUp':{a:'↑',l:'Subiendo',c:'var(--amber)'},'FortyFiveUp':{a:'↗',l:'Sube lento',c:'var(--amber)'},'Flat':{a:'→',l:'Estable',c:'var(--green)'},'FortyFiveDown':{a:'↘',l:'Baja lento',c:'var(--blue)'},'SingleDown':{a:'↓',l:'Bajando',c:'var(--red)'},'DoubleDown':{a:'↓↓',l:'Baja muy rápido',c:'var(--red)'},'NOT COMPUTABLE':{a:'?',l:'No calculable',c:'var(--t2)'},'RATE OUT OF RANGE':{a:'!',l:'Fuera de rango',c:'var(--red)'}};
 let hist=[],chartObj=null,trendChartObj=null,hours=3,trendHours=3,timer=null;
@@ -541,12 +541,10 @@ REGLAS:
 - Si hay algo preocupante, indícalo claramente`;
 
   try{
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('/.netlify/functions/glucobot', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
         system: systemPrompt,
         messages: [{
           role: 'user',
